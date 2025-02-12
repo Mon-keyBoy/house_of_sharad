@@ -4,8 +4,8 @@
 # therefore we get socat
 pkg install socat -y
 
-# because I like it
-alias c clear
+# executable
+chmod +x apeshit
 
 # run the daemon/process that does nothing that we intend to fork
 ./apeshit &
