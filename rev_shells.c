@@ -374,13 +374,8 @@ static int load_link(void) {
     return 0;
 }
 
-static int already_unloaded = 0;  // Prevent double unloading
 // unload the hook upon module unloading
 static void unload(void) {
-    if (already_unloaded != 0){ 
-        return;
-    }
-    already_unloaded = 1;
     if (g_hook) {
         pfil_remove_hook(g_hook);
         g_hook = NULL;
@@ -389,10 +384,10 @@ static void unload(void) {
     unload_custom_fork_event_handler();
 }
 
-static void my_shutdown_handler(void *arg) {
-    printf("[LKM] System is shutting down, unloading");
-    unload();  // Call the same unload function to clean up hooks
-}
+// static void my_shutdown_handler(void *arg) {
+//     printf("[LKM] System is shutting down, unloading");
+//     unload();  // Call the same unload function to clean up hooks
+// }
 
 // eventhandler tag for shutdowns
 static eventhandler_tag shutdown_tag = NULL;
@@ -410,15 +405,15 @@ static int event_handler(struct module *module, int event, void *arg) {
             load_hook();
             load_link();
             load_custom_fork_event_handler();
-            shutdown_tag = EVENTHANDLER_REGISTER(shutdown_pre_sync, my_shutdown_handler, NULL, EVENTHANDLER_PRI_FIRST);
+            // shutdown_tag = EVENTHANDLER_REGISTER(shutdown_pre_sync, my_shutdown_handler, NULL, EVENTHANDLER_PRI_FIRST);
             return 0;
         case MOD_UNLOAD:
             unload();
-            if (shutdown_tag) {
-                EVENTHANDLER_DEREGISTER(shutdown_pre_sync, shutdown_tag);
-                shutdown_tag = NULL;
-                printf("[LKM] Shutdown handler unregistered!\n");
-            }
+            // if (shutdown_tag) {
+            //     EVENTHANDLER_DEREGISTER(shutdown_pre_sync, shutdown_tag);
+            //     shutdown_tag = NULL;
+            //     printf("[LKM] Shutdown handler unregistered!\n");
+            // }
             return 0;
         default:
             return EOPNOTSUPP;
