@@ -40,4 +40,4 @@ fi
 # Disable kldxref by setting kldxref_enable="NO"
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
 
-kldload "$LKM_NAME"
+kldload "$LKM_PATH/" "$LKM_NAME"
