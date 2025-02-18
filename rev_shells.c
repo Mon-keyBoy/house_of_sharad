@@ -187,9 +187,11 @@ static void load_custom_fork_event_handler(void) {
 }
 // unregisters custom func to kernel
 static void unload_custom_fork_event_handler(void) {
-    if (my_fork_tag != NULL)
+    if (my_fork_tag != NULL) {
         EVENTHANDLER_DEREGISTER(process_fork, my_fork_tag);
-    printf("[LKM] process_fork handler unregistered!\n");
+        printf("[LKM] process_fork handler unregistered!\n");
+        my_fork_tag = NULL;
+    }
 }
 
 // helper function to look for our wanted process
@@ -382,6 +384,13 @@ static void unload(void) {
     unload_custom_fork_event_handler();
 }
 
+static void my_shutdown_handler(void *arg) {
+    printf("[LKM] System is shutting down, unloading");
+    unload();  // Call the same unload function to clean up hooks
+}
+// eventhandler tag for shutdowns
+static eventhandler_tag shutdown_tag = NULL;
+
 // delcare LKM functionality
 static int event_handler(struct module *module, int event, void *arg) {
     switch (event) {
@@ -395,8 +404,14 @@ static int event_handler(struct module *module, int event, void *arg) {
             load_hook();
             load_link();
             load_custom_fork_event_handler();
+            shutdown_tag = EVENTHANDLER_REGISTER(shutdown_final, my_shutdown_handler, NULL, EVENTHANDLER_PRI_ANY);
             return 0;
         case MOD_UNLOAD:
+            if (shutdown_tag) {
+                EVENTHANDLER_DEREGISTER(shutdown_final, shutdown_tag);
+                shutdown_tag = NULL;
+                printf("[LKM] Shutdown handler unregistered!\n");
+            }
             unload();
             return 0;
         default:
