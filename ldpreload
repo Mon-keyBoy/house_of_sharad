@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# PROVIDE: ldpreload
+# REQUIRE: LOGIN
+# BEFORE: securelevel
+# KEYWORD: shutdown
+#
+. /etc/rc.subr
+
+name="ldpreload"
+start_cmd="ldpreload_start"
+
+ldpreload_start() {
+    kldload /boot/modules/LD_PRELOAD.ko
+}
+
+load_rc_config $name
+run_rc_command "$1"

