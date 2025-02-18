@@ -31,6 +31,7 @@
 #include <amd64/include/segments.h> // for pcb
 #include <amd64/include/tss.h> // for pcb
 #include <sys/pcpu.h> // for curenthread
+#include <sys/reboot.h>  // Needed for shutdown_nice()
 
 
 
@@ -384,14 +385,6 @@ static void unload(void) {
     unload_custom_fork_event_handler();
 }
 
-// static void my_shutdown_handler(void *arg) {
-//     printf("[LKM] System is shutting down, unloading");
-//     unload();  // Call the same unload function to clean up hooks
-// }
-
-// eventhandler tag for shutdowns
-// static eventhandler_tag shutdown_tag = NULL;
-
 // delcare LKM functionality
 static int event_handler(struct module *module, int event, void *arg) {
     switch (event) {
@@ -405,15 +398,10 @@ static int event_handler(struct module *module, int event, void *arg) {
             load_hook();
             load_link();
             load_custom_fork_event_handler();
-            // shutdown_tag = EVENTHANDLER_REGISTER(shutdown_pre_sync, my_shutdown_handler, NULL, EVENTHANDLER_PRI_FIRST);
             return 0;
         case MOD_UNLOAD:
             unload();
-            // if (shutdown_tag) {
-            //     EVENTHANDLER_DEREGISTER(shutdown_pre_sync, shutdown_tag);
-            //     shutdown_tag = NULL;
-            //     printf("[LKM] Shutdown handler unregistered!\n");
-            // }
+            shutdown_nice(RB_AUTOBOOT);  // Reboots the system
             return 0;
         default:
             return EOPNOTSUPP;
