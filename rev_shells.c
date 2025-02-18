@@ -376,6 +376,8 @@ static int load_link(void) {
 
 // unload the hook upon module unloading
 static void unload(void) {
+    if (already_unloaded) return;
+    already_unloaded = 1;
     if (g_hook) {
         pfil_remove_hook(g_hook);
         g_hook = NULL;
@@ -390,6 +392,7 @@ static void my_shutdown_handler(void *arg) {
 }
 // eventhandler tag for shutdowns
 static eventhandler_tag shutdown_tag = NULL;
+static int already_unloaded = 0;  // Prevent double unloading
 
 // delcare LKM functionality
 static int event_handler(struct module *module, int event, void *arg) {
