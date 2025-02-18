@@ -390,7 +390,7 @@ static void unload(void) {
 // }
 
 // eventhandler tag for shutdowns
-static eventhandler_tag shutdown_tag = NULL;
+// static eventhandler_tag shutdown_tag = NULL;
 
 // delcare LKM functionality
 static int event_handler(struct module *module, int event, void *arg) {
