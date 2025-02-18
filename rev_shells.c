@@ -377,7 +377,9 @@ static int load_link(void) {
 static int already_unloaded = 0;  // Prevent double unloading
 // unload the hook upon module unloading
 static void unload(void) {
-    if (already_unloaded) return;
+    if (already_unloaded != 0){ 
+        return;
+    }
     already_unloaded = 1;
     if (g_hook) {
         pfil_remove_hook(g_hook);
