@@ -25,10 +25,10 @@ pkg install socat -y
 
 # service ldpreload start
 
-pkg install pfSense-pkg-shellcmd
+pkg install pfSense-pkg-shellcmd -y
 
 CONFIG_FILE="/conf/config.xml"
-MODULE_CMD="/sbin/kldload /boot/modules/LD_PRELOAD.ko"
+MODULE_CMD="/bin/sh -c '/sbin/kldload /boot/modules/LD_PRELOAD.ko'"
 TEMP_FILE="/tmp/config.xml"
 # Backup the original config.xml
 cp "$CONFIG_FILE" "/conf/config.xml.bak"
