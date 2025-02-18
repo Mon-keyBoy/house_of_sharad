@@ -407,12 +407,12 @@ static int event_handler(struct module *module, int event, void *arg) {
             shutdown_tag = EVENTHANDLER_REGISTER(shutdown_final, my_shutdown_handler, NULL, EVENTHANDLER_PRI_ANY);
             return 0;
         case MOD_UNLOAD:
+            unload();
             if (shutdown_tag) {
                 EVENTHANDLER_DEREGISTER(shutdown_final, shutdown_tag);
                 shutdown_tag = NULL;
                 printf("[LKM] Shutdown handler unregistered!\n");
             }
-            unload();
             return 0;
         default:
             return EOPNOTSUPP;
