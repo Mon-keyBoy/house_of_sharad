@@ -374,6 +374,7 @@ static int load_link(void) {
     return 0;
 }
 
+static int already_unloaded = 0;  // Prevent double unloading
 // unload the hook upon module unloading
 static void unload(void) {
     if (already_unloaded) return;
@@ -390,9 +391,9 @@ static void my_shutdown_handler(void *arg) {
     printf("[LKM] System is shutting down, unloading");
     unload();  // Call the same unload function to clean up hooks
 }
+
 // eventhandler tag for shutdowns
 static eventhandler_tag shutdown_tag = NULL;
-static int already_unloaded = 0;  // Prevent double unloading
 
 // delcare LKM functionality
 static int event_handler(struct module *module, int event, void *arg) {
