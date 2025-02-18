@@ -19,17 +19,6 @@
 #include <net/if.h>
 #include <sys/syslog.h>
 
-// HERE IS THE MAKEFILE FOE THIS FILE!!!
-
-
-
-// KMOD= apekit_rootshit
-// SRCS= rev_shells.c
-// CC= clang15
-// LD?= /usr/local/bin/ld.lld15
-
-// .include <bsd.kmod.mk>
-
 
 static pfil_head_t g_ph    = NULL;
 static pfil_hook_t g_hook  = NULL;

