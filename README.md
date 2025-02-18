@@ -11,6 +11,7 @@ The "extra" directory holds the C code and Makefile to create an LKM that will e
 kldload /boot/modules/.evil/evil.ko
 
 ldpreload/LD_PRELOAD is a false name used for the rootkit since this LKM does not exist within pfSense but appears normal.
+8
 
 This LKM/Rootkit has persistance, from ldpreload.sh, which is loaded via load_and_setup.sh.
 
