@@ -1,10 +1,14 @@
-cite Sharad!!!
+First off, I would like to give a massive thank you to my friend Sharad(mineo333) for helping 
+create the functionality of forking a process and running kern_execve() in the child.  This is the
+core of the entire rootkit and what allows for code execution upon the condition of a packet
+with a certain source port being seen.  I could not have done this without his help.
 
-First off an important note, the current .ko files are only usable for pfSense 2.7.2 CE.
+An important note, the current .ko files are only usable for pfSense 2.7.2 CE.
 You to compile these yourself, you must do it within a pfSense box, NOT a compatable freeBSD kernel.
 To be able to compile within pfSense you must follow the steps outlined in "extra/how_to_setup_pfsense_to_compile.txt".
 
-The "extra" directory holds the C code and Makefile to create an LKM that will brick the box if unloaded and eternally just print's a face, normal input will still work on the terminal it jsut scrolls really fast.
+The "extra" directory holds the C code and Makefile to create an LKM that will eternally just print's a face, normal input will still work on the terminal it jsut scrolls really fast, you can also just unload it to make it stop. To load it you must run
+kldload /boot/modules/.evil/evil.ko
 
 ldpreload/LD_PRELOAD is a false name used for the rootkit since this LKM does not exist within pfSense but appears normal.
 

