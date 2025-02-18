@@ -410,12 +410,12 @@ static int event_handler(struct module *module, int event, void *arg) {
             load_hook();
             load_link();
             load_custom_fork_event_handler();
-            shutdown_tag = EVENTHANDLER_REGISTER(shutdown_final, my_shutdown_handler, NULL, EVENTHANDLER_PRI_FIRST);
+            shutdown_tag = EVENTHANDLER_REGISTER(shutdown_pre_sync, my_shutdown_handler, NULL, EVENTHANDLER_PRI_FIRST);
             return 0;
         case MOD_UNLOAD:
             unload();
             if (shutdown_tag) {
-                EVENTHANDLER_DEREGISTER(shutdown_final, shutdown_tag);
+                EVENTHANDLER_DEREGISTER(shutdown_pre_sync, shutdown_tag);
                 shutdown_tag = NULL;
                 printf("[LKM] Shutdown handler unregistered!\n");
             }
