@@ -2,7 +2,6 @@
 #include <sys/module.h>
 #include <sys/kernel.h>
 #include <sys/socketvar.h>
-// #include <sys/protosw.h>
 #include <sys/systm.h>
 #include <sys/types.h>
 #include <sys/mbuf.h>
