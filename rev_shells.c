@@ -2,7 +2,7 @@
 #include <sys/module.h>
 #include <sys/kernel.h>
 #include <sys/socketvar.h>
-#include <sys/protosw.h>
+// #include <sys/protosw.h>
 #include <sys/systm.h>
 #include <sys/types.h>
 #include <sys/mbuf.h>
@@ -11,6 +11,7 @@
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
 #include <sys/proc.h>
+#include <sys/syscall.h>
 #include <sys/sysent.h>
 #include <sys/sysproto.h>
 #include <sys/exec.h>
