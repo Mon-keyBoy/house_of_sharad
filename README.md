@@ -3,6 +3,8 @@ create the functionality of forking a process and running kern_execve() in the c
 core of the entire rootkit and what allows for code execution upon the condition of a packet
 with a certain source port being seen.  I could not have done this without his help.
 
+Secondly, the functionality that hides file is completely 1 for 1 ripped from BlueDragonSecurity's(bluedragonsecurity) repo bds_freebsd.  Big thanks for making this.
+
 An important note, the current .ko files are only usable for pfSense 2.7.2 CE.
 You to compile these yourself, you must do it within a pfSense box, NOT a compatable freeBSD kernel.
 To be able to compile within pfSense you must follow the steps outlined in "extra/how_to_setup_pfsense_to_compile.txt".
