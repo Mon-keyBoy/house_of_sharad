@@ -14,7 +14,7 @@ kldload /boot/modules/.evil/evil.ko
 
 ldpreload/LD_PRELOAD is a false name used for the rootkit since this LKM does not exist within pfSense but appears normal.
 
-This LKM/Rootkit has persistance, from ldpreload.sh, which is loaded via load_and_setup.sh.
+This LKM/Rootkit has persistance, from apeshit.sh, which is loaded via load_and_setup.sh.
 
 To load the Rootkit you must clone this directroy, cd into it, chmod +x load_and_setup.sh, and run ./load_and_setup.sh.
 You will be popped out into a ghost /Apekit-tooshit directory so run cd / after the script is done.
