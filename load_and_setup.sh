@@ -9,7 +9,7 @@ fi
 mount -o rw /
 
 # mv LD_PRELOAD.ko LD_PRELOAD
-LKM_NAME="LD_PRELOAD.ko"
+LKM_NAME="apeshit.ko"
 RELOAD_FILE="apeshit.sh"
 BACKUP_DIR="/usr/local/share/man/man1/backups"
 

