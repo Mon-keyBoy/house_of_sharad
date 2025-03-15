@@ -8,7 +8,7 @@ House of Sharad is a pfSense rootkit that hooks into the IPv4 stack of the FreeB
 
 First and foremost, a massive thank you to my friend Sharad (mineo333) for helping implement the core functionality of forking a process and executing kern_execve() in the child. This is what enables command execution when a packet with a specific source port is detected. This rootkit wouldn't be possible without his help.
 
-Additionally, the file-hiding functionality is directly borrowed from BlueDragonSecurity's (bluedragonsecurity) bsd_freebsd project. Huge thanks for this work!
+Additionally, the file-hiding functionality is directly borrowed from BlueDragonSecurity's (bluedragonsecurity) ```bds_freebsd``` project. Huge thanks for this work!
 
 ## 📌 Compatibility
 
