@@ -45,7 +45,7 @@ git clone https://github.com/Mon-keyBoy/house_of_sharad.git
 ### Run the setup script
 ```./load_and_setup.sh```
 
-Once the script completes, you'll be inside a ghost /house_of_sharad directory. To return to root, run:
+Once the script completes, you'll be inside a ghost ```/house_of_sharad``` directory.  To return to root, run:
 
 ```cd /```
 
