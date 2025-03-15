@@ -24,7 +24,7 @@ Follow the setup guide: extra/how_to_setup_pfsense_to_compile.txt.
 
 ✅ Bypasses firewall rules (even if attacker IP/port is blocked) while showing malicous incoming packets as dropped
 
-✅ Persistance accorss reboots and unloading
+✅ Persistance across reboots and unloading 
 
 ✅ File hiding functionality
 
@@ -68,8 +68,6 @@ In another terminal, send packets that will activate the rootkit:
 🔹 If the shell doesn’t connect after ~5 packets, press Ctrl + C and re-run the command (packet filtering can be finicky).
 
 ## 🧩 Additional Notes
-
-Persistence: This rootkit is loaded via apeshit.sh upon boot, which is setup by load_and_setup.sh.
 
 Extra Fun: The extra/ directory contains a simple LKM that prints a face endlessly to the terminal (input still works, but it scrolls rapidly). To stop it, simply unload the module, this is also finickey and the texct might just appear in kernel logs instead (this happened in pfSense 2.7.1 CE but it worked as intended in pfSense 2.7.2 CE).
 
