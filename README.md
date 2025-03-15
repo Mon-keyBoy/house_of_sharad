@@ -36,6 +36,7 @@ Follow the setup guide: extra/how_to_setup_pfsense_to_compile.txt.
 
 ### Clone the repository
 git clone https://github.com/Mon-keyBoy/house_of_sharad.git
+
 ```cd house_of_sharad```
 
 ### Set execution permissions
