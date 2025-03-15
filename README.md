@@ -75,5 +75,12 @@ Extra Fun: The extra/ directory contains a simple LKM that prints a face endless
 
 ```kldload /boot/modules/.evil/evil.ko```
 
+### How it works
+
+This Rootkit registers a custom hook to the top of the IPv4 head in pf and establishes reverse shells by forking the standard process that runs the ```cat``` command and running an execve call in child with the reverse shell command.
+
+This is super duper mega awesome because even if firewall rules are made against the attacker IP, ports, or anything.  The registered hook will still receive the packet and make a reverse shell while showing incoming packets as being dropped, even though they are still seen by the box.
+
+
 # ⚠️ Disclaimer: This project is for educational and research purposes only. Unauthorized use may be illegal. The author takes no responsibility for misuse.
 
